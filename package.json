@@ -16,8 +16,13 @@
     "test": "promises-aplus-tests test/fixtures/pat-adapter.js",
     "install": "node-gyp rebuild"
   },
-  "repository": "",
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Schoonology/aplus.git"
+  },
+  "keywords": [
+  ],
+  "author": "Michael Schoonmaker <michael.r.schoonmaker@gmail.com>",
   "license": "MIT",
   "gypfile": true
 }
