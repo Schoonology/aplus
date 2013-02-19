@@ -1,0 +1,23 @@
+{
+  "name": "aplus",
+  "version": "0.1.0",
+  "description": "A native, barebones Promises/A+ implementation.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bindings": "~1.0.0"
+  },
+  "devDependencies": {
+    "promises-aplus-tests": "~1.2.1"
+  },
+  "scripts": {
+    "test": "promises-aplus-tests test/fixtures/pat-adapter.js",
+    "install": "node-gyp rebuild"
+  },
+  "repository": "",
+  "author": "",
+  "license": "MIT",
+  "gypfile": true
+}
