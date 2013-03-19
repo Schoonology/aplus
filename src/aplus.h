@@ -37,17 +37,18 @@ namespace aplus {
 
     protected:
       int state;
+      uv_idle_t handle;
       v8::Persistent<v8::Value> value;
       v8::Persistent<v8::Value> reason;
-      v8::Persistent<v8::Array> fulfillment;
-      v8::Persistent<v8::Array> rejection;
+      v8::Persistent<v8::Array> children;
 
       Promise();
 
       //
       // ## Promise(value, reason)
       //
-      // Creates a new Promise. If value is provided, the Promise starts in the fulfilled state. If reason is provided,
+      // Creates a new Promise. If value is provided and is not thenable, the Promise starts in the fulfilled state with
+      // that value. If value is provided as a thenable, the new Promise wraps the old Promise. If reason is provided,
       // the Promise starts in the rejected state. If neither is provided, the Promise starts in the pending state.
       // If both are provided, throws an Error.
       //
@@ -58,23 +59,41 @@ namespace aplus {
       //
       // Registers **fulfilled** as a fulfillment callback and **rejected** as a rejection callback.
       //
+      // Returns a new Promise.
+      //
       static v8::Handle<v8::Value> Then(const v8::Arguments& args);
 
       //
       // ## Fulfill `Fulfill(value)`
       //
-      // Attempts to fulfill the Promise with **value**. If the Promise has already been fulfilled or rejected, throws
-      // an Error. If successful, all fulfillment callbacks will be fired in order.
+      // Attempts to fulfill the Promise with **value**. If **value** is a thenable, this Promise will be fulfilled or
+      // rejected exactly as that Promise is fulfilled or rejected. If successful, all fulfillment callbacks will be
+      // fired in order.
+      //
+      // Returns false if the Promise has already been fulfilled or rejected. Otherwise, returns true.
       //
       static v8::Handle<v8::Value> Fulfill(const v8::Arguments& args);
 
       //
       // ## Reject `Reject(reason)`
       //
-      // Attempts to reject the Promise with **reason**. If the Promise has already been fulfilled or rejected, throws
-      // an Error. If successful, all rejection callbacks will be fired in order.
+      // Attempts to reject the Promise with **reason**. If successful, all rejection callbacks will be fired in order.
+      //
+      // Returns false if the Promise has already been fulfilled or rejected. Otherwise, returns true.
       //
       static v8::Handle<v8::Value> Reject(const v8::Arguments& args);
+
+      //
+      // ## Notify `Notify()`
+      //
+      // For internal use only.
+      //
+      // Cycles through all rejection or fulfillment callbacks, in order, firing as necessary.
+      //
+      // Returns nothing.
+      //
+      static v8::Handle<v8::Value> Notify(const v8::Arguments& args);
+      static void NotifyLater(uv_idle_t* handle, int status);
   };
 }
 

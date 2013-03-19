@@ -24,3 +24,7 @@ promise.then(fulfilled, rejected)
 promise = new aplus.Promise()
 promise.reject('Boo again!')
 promise.then(fulfilled, rejected)
+
+promise = new aplus.Promise()
+promise.then(fulfilled).then(fulfilled)
+promise.fulfill('DOUBLE!')

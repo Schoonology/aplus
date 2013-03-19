@@ -1,0 +1,5 @@
+aplus = require('./')
+a = new aplus.Promise()
+a.then(function (value) { console.log('F:', value) }, function (reason) { console.log('R:', reason ) })
+a.then(function (value) { throw new Error('TEST!') })
+a.fulfill(2)
